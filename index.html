@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172033">
+  <meta name="description" content="TaskFlow is a focused, local-first task manager for planning your day and tracking progress.">
+  <title>TaskFlow — Make room for what matters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#" aria-label="TaskFlow home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Task<span class="brand-light">Flow</span></span>
+      </a>
+      <button class="workspace-switcher" id="workspaceButton" type="button">
+        <span class="workspace-avatar">T</span><span class="workspace-copy"><strong>Personal space</strong><small>Free workspace</small></span><span class="chevron">⌄</span>
+      </button>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="primary-nav" id="primaryNav">
+        <button class="nav-item active" data-view="overview"><span class="nav-icon">▦</span><span>Overview</span></button>
+        <button class="nav-item" data-view="all"><span class="nav-icon">☷</span><span>My Tasks</span><span class="nav-count" id="countAll">0</span></button>
+        <button class="nav-item" data-view="today"><span class="nav-icon">◷</span><span>Today</span><span class="nav-count" id="countToday">0</span></button>
+        <button class="nav-item" data-view="upcoming"><span class="nav-icon">▣</span><span>Upcoming</span></button>
+        <button class="nav-item" data-view="completed"><span class="nav-icon">✓</span><span>Completed</span><span class="nav-count" id="countCompleted">0</span></button>
+      </nav>
+      <div class="sidebar-section-head"><span class="nav-label">CATEGORIES</span><button id="addCategoryButton" class="icon-button tiny" type="button" aria-label="Add category" title="Add category">+</button></div>
+      <nav class="category-nav" id="categoryNav" aria-label="Task categories"></nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-tip"><div class="tip-icon">✦</div><strong>A little progress adds up.</strong><p>Keep your focus on the next useful step.</p></div>
+      <button class="nav-item settings-nav" data-view="settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+      <div class="sidebar-footer"><span class="status-dot"></span> Your tasks stay on this device</div>
+    </aside>
+
+    <main class="main-workspace">
+      <header class="topbar">
+        <button class="icon-button menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-slash">/</span><strong id="breadcrumbCurrent">Overview</strong></div>
+        <div class="topbar-actions">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search tasks..." autocomplete="off" aria-label="Search tasks"><kbd>⌘ K</kbd></label>
+          <button class="icon-button theme-quick" id="quickThemeButton" type="button" aria-label="Toggle theme" title="Toggle theme">☼</button>
+          <button class="avatar-button" id="settingsShortcut" type="button" aria-label="Open settings">D</button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <section class="welcome-row">
+          <div><div class="eyebrow" id="currentDate">YOUR DAY, YOUR PACE</div><h1 id="greeting">Good afternoon.</h1><p class="welcome-subtitle">A clear plan makes space for great work.</p></div>
+          <button class="button button-primary" id="newTaskButton" type="button"><span class="button-plus">+</span> New task</button>
+        </section>
+
+        <section class="overview-only" id="overviewPanel">
+          <div class="section-heading"><div><h2>Your overview</h2><p>Here’s how things are moving today.</p></div><span class="live-badge"><span></span> LIVE SUMMARY</span></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Total tasks</span><span class="stat-icon stat-blue">☷</span></div><div class="stat-number" id="statTotal">0</div><div class="stat-foot"><span class="stat-foot-dot blue-dot"></span>All your tracked tasks</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Completed</span><span class="stat-icon stat-green">✓</span></div><div class="stat-number" id="statCompleted">0</div><div class="stat-foot"><span class="stat-foot-dot green-dot"></span><span id="completionRate">0%</span> completion rate</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Pending</span><span class="stat-icon stat-amber">◷</span></div><div class="stat-number" id="statPending">0</div><div class="stat-foot"><span class="stat-foot-dot amber-dot"></span>Still on your list</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Overdue</span><span class="stat-icon stat-red">!</span></div><div class="stat-number" id="statOverdue">0</div><div class="stat-foot"><span class="stat-foot-dot red-dot"></span>Needs a new plan</div></article>
+          </div>
+          <div class="overview-lower">
+            <section class="panel progress-panel"><div class="panel-heading"><div><h3>Weekly momentum</h3><p>Small wins, consistently.</p></div><span class="panel-icon">↗</span></div><div class="progress-main"><div class="progress-ring" id="progressRing"><div><strong id="progressPercent">0%</strong><small>complete</small></div></div><div class="progress-copy"><strong id="progressHeadline">Your week starts here</strong><p id="progressDescription">Complete a task to start building momentum.</p></div></div><div class="progress-track"><span id="progressBar"></span></div><div class="progress-legend"><span><i class="legend-dot done-legend"></i>Completed</span><span><i class="legend-dot pending-legend"></i>Remaining</span></div></section>
+            <section class="panel focus-panel"><div class="panel-heading"><div><h3>Focus for today</h3><p>Your next steps at a glance.</p></div><button class="text-button" data-view="today" type="button">View all <span>→</span></button></div><div id="focusList" class="focus-list"></div></section>
+          </div>
+        </section>
+
+        <section class="tasks-section" id="tasksPanel">
+          <div class="task-section-heading"><div><div class="heading-title-row"><h2 id="viewTitle">All tasks</h2><span class="result-count" id="resultCount">0</span></div><p id="viewSubtitle">Everything you want to move forward.</p></div><button class="button button-secondary compact-add" id="secondaryNewTask" type="button">+ Add task</button></div>
+          <div class="task-toolbar">
+            <div class="filter-tabs" id="filterTabs" role="group" aria-label="Filter tasks">
+              <button class="filter-tab active" data-filter="all" type="button">All tasks</button>
+              <button class="filter-tab" data-filter="pending" type="button">Pending</button>
+              <button class="filter-tab" data-filter="completed" type="button">Completed</button>
+              <button class="filter-tab" data-filter="overdue" type="button">Overdue</button>
+            </div>
+            <div class="toolbar-controls"><label class="select-wrap"><span class="sr-only">Filter by priority</span><select id="priorityFilter"><option value="all">All priorities</option><option value="high">High priority</option><option value="medium">Medium priority</option><option value="low">Low priority</option></select></label><label class="select-wrap"><span class="sr-only">Sort tasks</span><select id="sortSelect"><option value="due">Sort: Due date</option><option value="priority">Sort: Priority</option><option value="created">Sort: Created date</option><option value="alphabetical">Sort: A–Z</option></select></label></div>
+          </div>
+          <div class="active-filters" id="activeFilters" hidden></div>
+          <div class="task-list" id="taskList" aria-live="polite"></div>
+          <div class="task-list-footer"><span id="listFooterText">Showing 0 tasks</span><button class="text-button" id="clearCompletedButton" type="button">Clear completed</button></div>
+        </section>
+
+        <section class="settings-panel" id="settingsPanel" hidden>
+          <div class="task-section-heading"><div><h2>Settings</h2><p>Make TaskFlow work the way you do.</p></div></div>
+          <div class="settings-layout">
+            <section class="settings-card"><div class="settings-card-title"><span class="settings-icon">◐</span><div><h3>Appearance</h3><p>Choose a comfortable workspace.</p></div></div><div class="setting-row"><div><strong>Theme</strong><small>Switch between light and dark mode.</small></div><div class="segmented-control" id="themeOptions"><button data-theme="light" class="selected" type="button">Light</button><button data-theme="dark" type="button">Dark</button></div></div></section>
+            <section class="settings-card"><div class="settings-card-title"><span class="settings-icon">▦</span><div><h3>Workspace</h3><p>Set your preferred starting point.</p></div></div><label class="setting-row" for="defaultView"><span><strong>Default task view</strong><small>Choose the view shown when you open TaskFlow.</small></span><select id="defaultView" class="settings-select"><option value="overview">Overview</option><option value="all">My Tasks</option><option value="today">Today</option><option value="upcoming">Upcoming</option><option value="completed">Completed</option></select></label></section>
+            <section class="settings-card"><div class="settings-card-title"><span class="settings-icon">▤</span><div><h3>Your data</h3><p>Your information is stored locally in this browser.</p></div></div><div class="setting-row"><div><strong>Export tasks</strong><small>Download a JSON backup of tasks and categories.</small></div><button class="button button-secondary" id="exportButton" type="button">Export JSON</button></div><div class="setting-row"><div><strong>Import tasks</strong><small>Restore tasks from a TaskFlow JSON backup.</small></div><button class="button button-secondary" id="importButton" type="button">Import JSON</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><div class="setting-row"><div><strong>Clear all tasks</strong><small>Permanently remove tasks from this browser.</small></div><button class="button button-danger" id="clearAllButton" type="button">Clear data</button></div><div class="setting-row"><div><strong>Restore sample data</strong><small>Replace current tasks with the original demo tasks.</small></div><button class="button button-secondary" id="restoreSampleButton" type="button">Restore samples</button></div></section>
+            <section class="settings-card"><div class="settings-card-title"><span class="settings-icon">ⓘ</span><div><h3>About TaskFlow</h3><p>A local-first productivity project.</p></div></div><p class="about-copy">TaskFlow is built with HTML, CSS, and vanilla JavaScript. It does not use an account, server, or cloud sync. Tasks stay in this browser and will not automatically appear on another device.</p><div class="storage-note" id="storageNotice"><span class="status-dot"></span><span>Checking browser storage…</span></div></section>
+          </div>
+        </section>
+        <footer class="app-footer"><span>Made for meaningful progress.</span><span>TaskFlow <span class="footer-separator">·</span> Local-first by design</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="task-dialog" id="taskDialog" aria-labelledby="dialogTitle">
+    <form id="taskForm" novalidate>
+      <div class="dialog-header"><div><span class="dialog-eyebrow" id="dialogEyebrow">TASK DETAILS</span><h2 id="dialogTitle">Create a task</h2><p>Make the next step clear and achievable.</p></div><button class="icon-button dialog-close" id="closeDialogButton" type="button" aria-label="Close dialog">×</button></div>
+      <div class="form-error" id="formError" role="alert" hidden></div>
+      <div class="form-field"><label for="taskTitle">Task title <span>*</span></label><input id="taskTitle" name="title" type="text" maxlength="120" placeholder="e.g. Finish project proposal" required><small class="field-hint">Keep it clear and actionable.</small></div>
+      <div class="form-field"><label for="taskDescription">Description <span class="optional-label">OPTIONAL</span></label><textarea id="taskDescription" name="description" rows="3" maxlength="600" placeholder="Add a little context or your next step…"></textarea></div>
+      <div class="form-grid"><div class="form-field"><label for="taskDueDate">Due date</label><input id="taskDueDate" name="dueDate" type="date"></div><div class="form-field"><label for="taskPriority">Priority</label><select id="taskPriority" name="priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></div></div>
+      <div class="form-field"><label for="taskCategory">Category</label><select id="taskCategory" name="category"></select></div>
+      <div class="dialog-footer"><button class="button button-secondary" id="cancelDialogButton" type="button">Cancel</button><button class="button button-primary" id="saveTaskButton" type="submit">Create task <span>→</span></button></div>
+    </form>
+  </dialog>
+  <dialog class="confirm-dialog" id="confirmDialog" aria-labelledby="confirmTitle"><div class="confirm-icon">!</div><h2 id="confirmTitle">Are you sure?</h2><p id="confirmMessage">This action cannot be undone.</p><div class="confirm-actions"><button class="button button-secondary" id="confirmCancel" type="button">Cancel</button><button class="button button-danger" id="confirmProceed" type="button">Continue</button></div></dialog>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
