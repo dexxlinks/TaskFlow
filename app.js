@@ -117,11 +117,11 @@
     ];
   }
   function initialize() {
-    state.tasks = readStored(STORAGE_KEYS.tasks, sampleTasks(), validTasks);
+    state.tasks = readStored(STORAGE_KEYS.tasks, [], validTasks);
     state.categories = readStored(STORAGE_KEYS.categories, DEFAULT_CATEGORIES, validCategories);
     state.preferences = { ...state.preferences, ...readStored(STORAGE_KEYS.preferences, state.preferences, validPreferences) };
     if (!storageAvailable) {
-      state.tasks = memoryStore.tasks.length ? clone(memoryStore.tasks) : sampleTasks();
+      state.tasks = clone(memoryStore.tasks);
       state.categories = clone(memoryStore.categories);
       state.preferences = clone(memoryStore.preferences);
     }
